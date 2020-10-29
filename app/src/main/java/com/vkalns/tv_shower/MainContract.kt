@@ -1,13 +1,14 @@
 package com.vkalns.tv_shower
 
 import com.vkalns.tv_shower.model.Show
+import java.io.File
 
 
 interface MainContract   {
 
     interface View {
 
-        fun createPresenter(): Presenter<View>
+        fun createPresenter(cacheDir: File): Presenter<View>
         fun displayShowTitle(title: String)
         fun displayDaysSincePremiere(subtitle: String)
         fun displayShowPoster(posterURL: String)

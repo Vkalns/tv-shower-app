@@ -1,18 +1,20 @@
 package com.vkalns.tv_shower
 
+import android.util.Log
 import com.vkalns.tv_shower.api.ShowRetriever
 import com.vkalns.tv_shower.model.Show
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-class MainPresenter() : MainContract.Presenter<MainContract.View> {
+class MainPresenter(val cacheDir: File) : MainContract.Presenter<MainContract.View> {
 
-    private val showRetriever = ShowRetriever()
+    private val showRetriever = ShowRetriever(cacheDir)
     private var view: MainContract.View? = null
     private lateinit var callback: Callback<Show>
 
@@ -22,6 +24,13 @@ class MainPresenter() : MainContract.Presenter<MainContract.View> {
         callback = object : Callback<Show> {
             override fun onResponse(call: Call<Show>?, response: Response<Show>?) {
                 response?.isSuccessful?.let {
+                    if (response.raw().cacheResponse() != null) {
+                        Log.d("Network", "response came from cache")
+                    }
+
+                    if (response.raw().networkResponse() != null) {
+                        Log.d("Network", "response came from server")
+                    }
                     val show = response.body()
                     if (show != null) {
                         displayShowInfo(show)

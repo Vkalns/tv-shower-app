@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.squareup.picasso.Picasso
 import com.vkalns.tv_shower.databinding.ActivityMainBinding
+import java.io.File
 
 
 class MainActivity : AppCompatActivity(), MainContract.View{
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity(), MainContract.View{
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        this.presenter = createPresenter()
+        this.presenter = createPresenter(cacheDir)
         presenter.onAttach(this)
         binding.searchButton.setOnClickListener {
             if (binding.searchBar.text.isNotBlank()){
@@ -71,14 +72,13 @@ class MainActivity : AppCompatActivity(), MainContract.View{
         ).show()
     }
 
-    fun dismissKeyboard(activity: Activity) {
+    private fun dismissKeyboard(activity: Activity) {
         val inputMethodManager : InputMethodManager =
             activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         if (activity.currentFocus != null) {
             inputMethodManager.hideSoftInputFromWindow(activity.currentFocus!!.applicationWindowToken, 0)
         }
     }
-
 
     override fun isNetworkConnected(): Boolean {
         //1
@@ -93,5 +93,5 @@ class MainActivity : AppCompatActivity(), MainContract.View{
                 networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 
-    override fun createPresenter(): MainContract.Presenter<MainContract.View> = MainPresenter()
+    override fun createPresenter(cacheDir: File): MainContract.Presenter<MainContract.View> = MainPresenter(cacheDir)
 }
