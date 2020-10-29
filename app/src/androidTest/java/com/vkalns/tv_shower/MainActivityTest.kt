@@ -12,7 +12,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.jakewharton.espresso.OkHttp3IdlingResource
-import com.squareup.picasso.Picasso
 import okhttp3.OkHttpClient
 import org.junit.After
 import org.junit.Before
